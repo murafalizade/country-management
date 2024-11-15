@@ -12,12 +12,12 @@ export const fetchCountryInfo = async (countryCode:string) => {
     return response.data;
 };
 
-export const fetchPopulationData = async () => {
-    const response = await axios.get(`${API_BASE_URL}/countries/population`);
+export const fetchPopulationData = async (country:string) => {
+    const response = await axios.get(`${API_BASE_URL}/countries/${country}/population`);
     return response.data;
 };
 
-export const fetchFlags = async () => {
-    const response = await axios.get(`${API_BASE_URL}/countries/flags`);
+export const fetchFlags = async (country:string) => {
+    const response = await axios.get(`${API_BASE_URL}/countries/${country}/flags`);
     return response.data;
 };

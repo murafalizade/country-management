@@ -33,26 +33,17 @@ export const CountryInfo: React.FC = () => {
 
     const { data: populationHistory, isLoading: isLoadingPopulationData, isError: isErrorPopulationData } = useQuery(
         ['populationData', countryData?.commonName],
-        () => fetchPopulationData(),
+        () => fetchPopulationData(countryData?.commonName),
         {
             enabled: !!countryData?.commonName,
-            select: (populationData) => {
-                const filteredData = populationData.data.find((country: any) =>
-                    country.country === countryData?.commonName || country.country === countryData?.officialName
-                );
-                return  filteredData?.populationCounts || [];
-            },
         }
     );
 
 
     const { data: flag } = useQuery(
         ['flagData', countryData?.commonName],
-        () => fetchFlags(),{
+        () => fetchFlags(countryData?.commonName),{
             enabled: !!countryData?.commonName,
-            select: (flags) => {
-                return flags.data?.find((x:any) => x.name === countryData?.commonName)?.flag;
-            }
         }
     );
 

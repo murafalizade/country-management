@@ -27,18 +27,20 @@ router.get('/countries/:country/borders', async (req, res) => {
     }
 });
 
-router.get('/countries/population', async (req, res) => {
+router.get('/countries/:country/population', async (req, res) => {
     try {
-        const populationData = await getPopulationByCountry();
+        const { country } = req.params;
+        const populationData = await getPopulationByCountry(country);
         res.status(200).json(populationData);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
 
-router.get('/countries/flags', async (req, res) => {
+router.get('/countries/:country/flags', async (req, res) => {
     try {
-        const flags = await getFlags();
+        const { country } = req.params;
+        const flags = await getFlags(country);
         res.status(200).json(flags);
     } catch (error) {
         res.status(500).json({ error: error.message });
