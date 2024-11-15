@@ -31,28 +31,27 @@ export const CountryInfo: React.FC = () => {
         }
     );
 
-    const { data: populationData, isLoading: isLoadingPopulationData, isError: isErrorPopulationData } = useQuery(
-        ['populationData', countryData?.officialName],
+    const { data: populationHistory, isLoading: isLoadingPopulationData, isError: isErrorPopulationData } = useQuery(
+        ['populationData', countryData?.commonName],
         () => fetchPopulationData(),
         {
-            enabled: !!countryData?.officialName,
+            enabled: !!countryData?.commonName,
             select: (populationData) => {
-                const filteredData = populationData.data.filter((country: any) =>
-                    country.country === countryData?.officialName
+                const filteredData = populationData.data.find((country: any) =>
+                    country.country === countryData?.commonName || country.country === countryData?.officialName
                 );
-
-                return filteredData.length > 0 ? filteredData[0]?.populationCounts : [];
+                return  filteredData?.populationCounts || [];
             },
         }
     );
 
 
     const { data: flag } = useQuery(
-        ['flagData', countryData.countryCode],
+        ['flagData', countryData?.commonName],
         () => fetchFlags(),{
-            enabled: !!countryData.countryCode,
+            enabled: !!countryData?.commonName,
             select: (flags) => {
-                return flags.data?.filter((x:any) => x.countryCode === countryData.countryCode)?.flag;
+                return flags.data?.find((x:any) => x.name === countryData?.commonName)?.flag;
             }
         }
     );
@@ -67,14 +66,12 @@ export const CountryInfo: React.FC = () => {
 
     const borderCountries: BorderCountry[] = countryData?.borders || [];
 
-    const populationHistory: PopulationHistory[] = populationData || [];
-    console.log(populationHistory);
     const chartData = {
-        labels: populationHistory.map(item => item.year),
+        labels: populationHistory.map((item:any) => item.year),
         datasets: [
             {
                 label: 'Population',
-                data: populationHistory.map(item => item.value),
+                data: populationHistory.map((item:any) => item.value),
                 backgroundColor: 'rgba(75, 192, 192, 0.6)',
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1,
